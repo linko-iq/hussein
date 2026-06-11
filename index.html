@@ -76,6 +76,25 @@ html[dir="ltr"] .toast{right:auto;left:22px}
   .brand span{display:none}
 }
 
+
+/* ===== LINKO WHATSAPP CONFIRM SUCCESS MODAL ===== */
+.success-modal{position:fixed;inset:0;z-index:180;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.76);padding:18px}
+.success-modal.show{display:flex}
+.success-card{width:min(560px,96%);padding:28px;text-align:center;position:relative;overflow:hidden}
+.success-card:before{content:"";position:absolute;inset:-80px;background:radial-gradient(circle at center,rgba(34,197,94,.24),transparent 48%);pointer-events:none}
+.success-icon{position:relative;width:82px;height:82px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;background:rgba(34,197,94,.16);border:1px solid rgba(34,197,94,.45);box-shadow:0 0 34px rgba(34,197,94,.28);font-size:42px;animation:successPop 1.2s ease-in-out infinite}
+@keyframes successPop{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.success-card h2{position:relative;font-size:32px;margin-bottom:10px}
+.success-card p{position:relative;color:var(--muted);line-height:1.9;margin-bottom:16px}
+.whatsapp-confirm{position:relative;width:100%;background:linear-gradient(135deg,#25D366,rgba(37,211,102,.62))!important;border-color:rgba(37,211,102,.55)!important;margin-top:8px}
+.success-back{position:relative;width:100%;margin-top:10px}
+.success-back.locked{opacity:.48;filter:grayscale(.35)}
+.success-warning{display:none;position:relative;margin:12px 0 0;padding:11px 13px;border-radius:16px;border:1px solid rgba(239,68,68,.45);background:rgba(239,68,68,.12);color:#fecaca;font-weight:900}
+.success-warning.show{display:block;animation:warnShake .25s ease}
+@keyframes warnShake{0%,100%{transform:translateX(0)}25%{transform:translateX(4px)}75%{transform:translateX(-4px)}}
+.success-note{font-size:13px!important;color:rgba(255,255,255,.62)!important;margin-top:12px!important}
+html[dir="ltr"] .success-card{text-align:center}
+
 </style>
 </head>
 <body class="no-scroll">
@@ -91,10 +110,70 @@ html[dir="ltr"] .toast{right:auto;left:22px}
 <section id="faq"><div class="container"><div class="section-title reveal"><span>FAQ</span><h2>الأسئلة الشائعة</h2></div><div class="faq-list"><div class="faq reveal"><button onclick="toggleFaq(this)">هل التسجيل إلكتروني؟ <span>+</span></button><div class="answer"><p>نعم، يستطيع الطالب إرسال بياناته من الموقع وتصل إلى واتساب المعهد ولوحة الإدارة التجريبية.</p></div></div><div class="faq reveal"><button onclick="toggleFaq(this)">هل يمكن اختيار أكثر من دورة؟ <span>+</span></button><div class="answer"><p>نعم، يمكن إضافة أكثر من دورة وحذف أي دورة قبل الإرسال.</p></div></div><div class="faq reveal"><button onclick="toggleFaq(this)">هل لوحة الإدارة حقيقية؟ <span>+</span></button><div class="answer"><p>هي لوحة Demo داخل المتصفح لغرض العرض، ويمكن تحويلها لنظام متكامل حسب طلب العميل.</p></div></div><div class="faq reveal"><button onclick="toggleFaq(this)">من يحدّث المحتوى؟ <span>+</span></button><div class="answer"><p>إدارة المحتوى والصور والدورات تبقى ضمن خدمات التطوير والصيانة لدى LINKO.</p></div></div></div></div></section>
 <section id="contact"><div class="container"><div class="section-title reveal"><span>Contact</span><h2>تواصل مع المعهد</h2></div><div class="contact-grid"><div class="glass" style="padding:24px"><div class="contact-links"><a class="contact-box" href="https://wa.me/9647747248826" target="_blank"><b>واتساب</b><br><span>استفسار سريع</span></a><a class="contact-box" href="#" target="_blank"><b>فيسبوك</b><br><span>Smart Institute</span></a><a class="contact-box" href="#" target="_blank"><b>إنستغرام</b><br><span>@smart.institute</span></a><a class="contact-box" href="mailto:info@smart-institute.example"><b>البريد</b><br><span>info@smart-institute.example</span></a></div><p style="margin-top:18px;color:var(--muted);line-height:1.9"><b>العنوان:</b> بغداد — شارع تعليمي رئيسي، قرب المجمع التجاري.</p></div><div class="map glass"><iframe src="https://www.google.com/maps?q=Baghdad%20Iraq&output=embed" loading="lazy"></iframe></div></div></div></section>
 <section><div class="container"><div class="linko glass reveal"><h2>تم التصميم والتطوير بواسطة LINKO</h2><p>نموذج رسمي لعرض حلول المواقع التعليمية وأنظمة التسجيل ولوحات الإدارة للمعاهد والمؤسسات.</p><a class="btn" href="https://wa.me/9647747248826" target="_blank">تواصل مع LINKO</a></div></div></section>
+
+<div class="success-modal" id="successModal">
+  <div class="success-card glass">
+    <div class="success-icon">✅</div>
+    <h2 id="successTitle">تم تسجيل طلبك بنجاح</h2>
+    <p id="successText">تم حفظ معلوماتك داخل النظام. لضمان وصول الطلب بسرعة إلى الإدارة، يرجى إرسال نسخة الطلب إلى واتساب الإدارة.</p>
+    <button class="btn whatsapp-confirm" id="successWhatsappBtn" onclick="sendSuccessWhatsApp()">إرسال المعلومات إلى واتساب الإدارة ↗</button>
+    <div class="success-warning" id="successWarning">⚠ رجاءً أولاً أرسل معلوماتك إلى واتساب الإدارة.</div>
+    <button class="btn ghost success-back locked" id="successBackBtn" onclick="closeSuccessModal()">العودة للصفحة الرئيسية</button>
+    <p class="success-note" id="successNote">زر العودة يتفعل بعد إرسال الطلب إلى واتساب.</p>
+  </div>
+</div>
+
 <div class="modal" id="loginModal"><div class="login-card glass"><h2>دخول الإدارة</h2><p>هذه لوحة إدارة تجريبية محمية برمز دخول كما في أنظمة LINKO.</p><div class="input"><label>رمز الدخول</label><input id="adminCode" type="password" placeholder="اكتب الرمز"></div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn" onclick="loginAdmin()">دخول</button><button class="btn ghost" onclick="closeLogin()">إغلاق</button></div><p style="font-size:13px;margin-top:12px;color:rgba(255,255,255,.55)">رمز العرض: 2026</p></div></div>
 <div class="dashboard" id="dashboard"><div class="dash-top"><div><h2>لوحة إدارة المعهد</h2><p style="color:var(--muted)">إدارة التسجيلات والإحصائيات — Demo</p></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" onclick="showHome()">الصفحة الرئيسية</button><button class="btn danger" onclick="logoutAdmin()">خروج</button></div></div><div class="dash-grid"><div class="dash-card"><small>عدد الطلاب</small><br><b id="dashStudents">0</b></div><div class="dash-card"><small>عدد الدورات</small><br><b>4</b></div><div class="dash-card"><small>أكثر دورة طلباً</small><br><b id="dashTopCourse" style="font-size:22px">-</b></div><div class="dash-card"><small>إجمالي التسجيلات</small><br><b id="dashTotal">0</b></div></div><div class="admin-layout"><div class="tabs"><button class="tab active" onclick="switchTab('students',this)">الطلاب المسجلين</button><button class="tab" onclick="switchTab('trash',this)">سلة المهملات</button></div><div class="admin-search glass"><input id="adminSearch" oninput="renderAdmin()" placeholder="ابحث عن طالب بالاسم أو الهاتف أو الدورة..."></div><div class="table-wrap glass"><table><thead id="tableHead"></thead><tbody id="adminTable"></tbody></table></div></div></div>
 <script>
-const ADMIN_CODE='2026',WHATSAPP='9647747248826';let selected=[],currentTab='students';window.addEventListener('load',()=>{setTimeout(()=>{splash.classList.add('open');setTimeout(()=>{splash.classList.add('done');document.body.classList.remove('no-scroll')},1150)},2000);renderSelected();updateBadge();renderAdmin()});const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));let counted=false;function animateCounters(){if(counted)return;let stats=document.querySelector('.stats');if(stats&&stats.getBoundingClientRect().top<innerHeight-90){counted=true;document.querySelectorAll('[data-count]').forEach(el=>{let target=parseFloat(el.dataset.count),suffix=el.dataset.suffix||'',start=null;function step(ts){if(!start)start=ts;let p=Math.min((ts-start)/1500,1),v=target*p;el.textContent=(target%1?v.toFixed(1):Math.floor(v))+suffix;if(p<1)requestAnimationFrame(step);else el.textContent=target+suffix}requestAnimationFrame(step)})}}addEventListener('scroll',animateCounters);animateCounters();function getStudents(){return JSON.parse(localStorage.getItem('linkoInstituteStudents')||'[]')}function setStudents(v){localStorage.setItem('linkoInstituteStudents',JSON.stringify(v))}function getTrash(){return JSON.parse(localStorage.getItem('linkoInstituteTrash')||'[]')}function setTrash(v){localStorage.setItem('linkoInstituteTrash',JSON.stringify(v))}function getTotal(){return Number(localStorage.getItem('linkoInstituteTotal')||'0')}function setTotal(v){localStorage.setItem('linkoInstituteTotal',String(v))}function addCourse(){let v=courseSelect.value;if(!selected.includes(v))selected.push(v);renderSelected()}function removeCourse(i){selected.splice(i,1);renderSelected()}function renderSelected(){let box=document.getElementById('selectedCourses');if(box)box.innerHTML=selected.length?selected.map((c,i)=>`<button type="button" onclick="removeCourse(${i})">${c} ✕</button>`).join(''):'<span style="color:rgba(255,255,255,.55)">لم يتم اختيار دورة بعد</span>'}function submitStudent(e){
+const ADMIN_CODE='2026',WHATSAPP='9647747248826';let selected=[],currentTab='students';let lastSubmittedStudent=null,successWhatsAppSent=false;
+
+function successLabel(key){
+  const en=linkoCurrentLang==='en';
+  const dict={
+    title:en?'Your request has been registered successfully':'تم تسجيل طلبك بنجاح',
+    text:en?'Your information was saved in the system. To ensure fast delivery to administration, please send a copy of the request to WhatsApp.':'تم حفظ معلوماتك داخل النظام. لضمان وصول الطلب بسرعة إلى الإدارة، يرجى إرسال نسخة الطلب إلى واتساب الإدارة.',
+    wa:en?'Send information to administration WhatsApp ↗':'إرسال المعلومات إلى واتساب الإدارة ↗',
+    back:en?'Back to home page':'العودة للصفحة الرئيسية',
+    warn:en?'⚠ Please send your information to WhatsApp first.':'⚠ رجاءً أولاً أرسل معلوماتك إلى واتساب الإدارة.',
+    note:en?'The back button is enabled after sending the request to WhatsApp.':'زر العودة يتفعل بعد إرسال الطلب إلى واتساب.'
+  };
+  return dict[key];
+}
+function openSuccessModal(student){
+  successWhatsAppSent=false;
+  if(successTitle) successTitle.textContent=successLabel('title');
+  if(document.getElementById('successText')) document.getElementById('successText').textContent=successLabel('text');
+  if(successWhatsappBtn) successWhatsappBtn.textContent=successLabel('wa');
+  if(successBackBtn){successBackBtn.textContent=successLabel('back');successBackBtn.classList.add('locked')}
+  if(successWarning){successWarning.textContent=successLabel('warn');successWarning.classList.remove('show')}
+  if(successNote) successNote.textContent=successLabel('note');
+  successModal.classList.add('show');
+}
+function buildWhatsAppMessage(student){
+  const en=linkoCurrentLang==='en';
+  if(en){
+    return `New registration request - Smart Education Institute\n\nName: ${student.name}\nPhone: ${student.phone}\nLevel: ${student.stage}\nBest contact time: ${student.time}\nCourses: ${student.courses.join(', ')}\nDate: ${student.date}`;
+  }
+  return `طلب تسجيل جديد - معهد التعليم الذكي\n\nالاسم: ${student.name}\nالهاتف: ${student.phone}\nالمرحلة: ${student.stage}\nوقت التواصل: ${student.time}\nالدورات: ${student.courses.join('، ')}\nالتاريخ: ${student.date}`;
+}
+function sendSuccessWhatsApp(){
+  if(!lastSubmittedStudent) return;
+  const msg=buildWhatsAppMessage(lastSubmittedStudent);
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
+  successWhatsAppSent=true;
+  if(successBackBtn) successBackBtn.classList.remove('locked');
+  if(successWarning) successWarning.classList.remove('show');
+}
+function closeSuccessModal(){
+  if(!successWhatsAppSent){
+    if(successWarning) successWarning.classList.add('show');
+    return;
+  }
+  successModal.classList.remove('show');
+  location.hash='home';
+}
+window.addEventListener('load',()=>{setTimeout(()=>{splash.classList.add('open');setTimeout(()=>{splash.classList.add('done');document.body.classList.remove('no-scroll')},1150)},2000);renderSelected();updateBadge();renderAdmin()});const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));let counted=false;function animateCounters(){if(counted)return;let stats=document.querySelector('.stats');if(stats&&stats.getBoundingClientRect().top<innerHeight-90){counted=true;document.querySelectorAll('[data-count]').forEach(el=>{let target=parseFloat(el.dataset.count),suffix=el.dataset.suffix||'',start=null;function step(ts){if(!start)start=ts;let p=Math.min((ts-start)/1500,1),v=target*p;el.textContent=(target%1?v.toFixed(1):Math.floor(v))+suffix;if(p<1)requestAnimationFrame(step);else el.textContent=target+suffix}requestAnimationFrame(step)})}}addEventListener('scroll',animateCounters);animateCounters();function getStudents(){return JSON.parse(localStorage.getItem('linkoInstituteStudents')||'[]')}function setStudents(v){localStorage.setItem('linkoInstituteStudents',JSON.stringify(v))}function getTrash(){return JSON.parse(localStorage.getItem('linkoInstituteTrash')||'[]')}function setTrash(v){localStorage.setItem('linkoInstituteTrash',JSON.stringify(v))}function getTotal(){return Number(localStorage.getItem('linkoInstituteTotal')||'0')}function setTotal(v){localStorage.setItem('linkoInstituteTotal',String(v))}function addCourse(){let v=courseSelect.value;if(!selected.includes(v))selected.push(v);renderSelected()}function removeCourse(i){selected.splice(i,1);renderSelected()}function renderSelected(){let box=document.getElementById('selectedCourses');if(box)box.innerHTML=selected.length?selected.map((c,i)=>`<button type="button" onclick="removeCourse(${i})">${c} ✕</button>`).join(''):'<span style="color:rgba(255,255,255,.55)">لم يتم اختيار دورة بعد</span>'}function submitStudent(e){
   e.preventDefault();
   if(!selected.length){alert(linkoCurrentLang==='en'?'Please select at least one course':'اختر دورة واحدة على الأقل');return}
   const student={
@@ -107,8 +186,9 @@ const ADMIN_CODE='2026',WHATSAPP='9647747248826';let selected=[],currentTab='stu
     date:new Date().toLocaleString('ar-IQ')
   };
   const arr=getStudents();arr.unshift(student);setStudents(arr);setTotal(getTotal()+1);
+  lastSubmittedStudent=student;
   selected=[];renderSelected();e.target.reset();renderAdmin();
-  showSuccess(linkoCurrentLang==='en'?'Your registration has been submitted successfully. The administration will contact you soon.':'تم تسجيل طلبك بنجاح، سيتم تواصل الإدارة معك قريباً.');
+  openSuccessModal(student);
 }
 function showToast(txt){
   toastText.textContent=txt;
